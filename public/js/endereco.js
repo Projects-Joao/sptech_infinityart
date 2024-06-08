@@ -85,7 +85,12 @@ const kpis = document.querySelector('.critico');
 h1_quantidade_endereco.innerHTML = qtdEndereco;
 h1_endereco_totais_perigo.innerHTML = enderecoPerigo;
 
-div_quantidade_endereco_perigo.innerHTML = `${porcentagemTotalEnderecoPerigoFormatada}% do total de endereco`  ;
+div_quantidade_endereco_perigo.innerHTML = `${porcentagemTotalEnderecoPerigoFormatada}% do total de endereco`;
+
+function limparSessao() {
+    sessionStorage.clear();
+    window.location = "index.html";
+}
 
 // script do objeto 
 $(document).ready(function () {

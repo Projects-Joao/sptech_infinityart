@@ -87,9 +87,10 @@ header .header-ul a:hover {
 
 /* NAV BUTTON */
 .nav-button {
-  display: flex;
+  display: none;
   column-gap: 10px;
 }
+
 .nav-button button {
   display: flex;
   align-items: center;
@@ -126,11 +127,12 @@ header .header-ul a:hover {
 
 /* NAV PROFILE */
 .nav-profile {
-  display: none;
+  display: flex;
   position: relative;
   justify-content: center;
   align-items: center;
 }
+
 .user-profile-button {
   display: flex;
   color: white;
@@ -286,6 +288,7 @@ header .header-ul a:hover {
   align-items: center;
   flex-direction: column;
 }
+
 .title {
   font-family: "Popins", sans-serif;
   font-weight: 900;

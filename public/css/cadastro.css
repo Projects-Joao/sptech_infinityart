@@ -268,7 +268,7 @@ font-weight: bold;
   align-items: center;
   overflow: hidden;
 }
-.conteudo form {
+.conteudo .form {
    display: flex; 
    flex-direction: column;
    align-items: center;
