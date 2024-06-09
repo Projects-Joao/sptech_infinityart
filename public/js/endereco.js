@@ -1,115 +1,134 @@
-const qtdEndereco = 3; 
-const enderecoPerigo = 2;
-const qtdAmbientes = 4;
-const qtdObras = 20;
+function enderecoLinhas() {
 
-const porcentagemTotalEnderecoPerigo = (enderecoPerigo * 100) / qtdEndereco ;
-const porcentagemTotalEnderecoPerigoFormatada = porcentagemTotalEnderecoPerigo.toFixed(1);
+    let idUsuario = sessionStorage.getItem('ID_USUARIO')
 
-const kpis = document.querySelector('.critico');
+    fetch(`/enderecos/listarEnderecos/${idUsuario}`).then(function (resposta) {
 
-    if(enderecoPerigo >= 1){
-            kpis.classList.add('alerta') 
-    } else {
-            kpis.classList.remove('alerta')
-    }
+        if (resposta.ok) {
+            if (resposta.status == 204) {
+                throw "Nenhum resultado encontrado!!";
+            }
 
-    let id = 0;
-    let quantidadeEndereco = qtdEndereco 
-    let quantidadeEnderecoPerigo = enderecoPerigo 
-    let endereco = ["Casa" , "Galpão" ,"Galeria"];
-    let rua = ['Dubai', 'Mariana', 'Vila Dourada']
-    let situacao = ["Seguro", "Perigo"];
-    let cep = 'XXXXX-XXX';
+            resposta.json().then(function (resposta) {
+            console.log("Dados recebidos: ", JSON.stringify(resposta));
 
-    let qtdEnderecoPerigoRestante = enderecoPerigo;
+            const bodyTabela = document.getElementById('tbody_corpo_tabela')
 
-    const bodyTabela = document.getElementById('tbody_corpo_tabela')
+            let enderecoPerigo = 0;
 
-    bodyTabela.innerHTML = "";
+                for (let i = 0; i < resposta.length; i++) {
+                    
+                    let linha = document.createElement('tr');
+                    linha.addEventListener('click', function() {
+                    window.open('ambiente.html', '_blank'); // Abre o link em uma nova aba
+                    });
+                    bodyTabela.appendChild(linha)
+                        
+                    var enderecoAtual = resposta[i];
 
-    for(let enderecoEmLinha = 0; enderecoEmLinha < qtdEndereco; enderecoEmLinha++) {
+                    let id = enderecoAtual.id;
+                    
+                    let celId = document.createElement('td');
+                    celId.textContent = id
+                    linha.appendChild(celId);
 
-        let linha = document.createElement('tr');
-        linha.addEventListener('click', function() {
-                window.open('ambiente.html', '_blank'); // Abre o link em uma nova aba
-                });
-                bodyTabela.appendChild(linha)
-                
-                let celId = document.createElement('td');
-                celId.textContent = id + 1
-                linha.appendChild(celId);
-                
-                let celEndereco = document.createElement('td');
-                celEndereco.textContent = `${endereco[enderecoEmLinha]}`
-                linha.appendChild(celEndereco);
-                
-                let celRua = document.createElement('td');
-                celRua.textContent = `${rua[enderecoEmLinha]}`
-                linha.appendChild(celRua);
-                
-                let celCEP = document.createElement('td');
-                celCEP.textContent = `${cep}`
-                linha.appendChild(celCEP);
+                    let endereco = enderecoAtual.nome; 
 
-                let celQtdAmbientes = document.createElement('td');
-                celQtdAmbientes.textContent = `${qtdAmbientes}`
-                linha.appendChild(celQtdAmbientes);
+                    let celEndereco = document.createElement('td');
+                    celEndereco.textContent = `${endereco}`
+                    linha.appendChild(celEndereco);
 
-                let celQtdObras = document.createElement('td');
-                celQtdObras.textContent = `${qtdObras}`
-                linha.appendChild(celQtdObras);
+                    let rua = enderecoAtual.rua;
+                    
+                    let celRua = document.createElement('td');
+                    celRua.textContent = `${rua}`
+                    linha.appendChild(celRua);
 
-                let situacaoAtual = 0
-                let situacaoCor = 'seguro'
+                    let cep = enderecoAtual.cep;
+                    
+                    let celCEP = document.createElement('td');
+                    celCEP.textContent = `${cep}`
+                    linha.appendChild(celCEP);
 
-                if (qtdEnderecoPerigoRestante > 0) {
-                    situacaoAtual = 1
-                    situacaoCor = 'perigo'
+                    let qtdAmbientes = enderecoAtual.qtd_ambientes;
+    
+                    let celQtdAmbientes = document.createElement('td');
+                    celQtdAmbientes.textContent = `${qtdAmbientes}`
+                    linha.appendChild(celQtdAmbientes);
+
+                    let qtdObras = enderecoAtual.qtd_obras
+    
+                    let celQtdObras = document.createElement('td');
+                    celQtdObras.textContent = `${qtdObras}`
+                    linha.appendChild(celQtdObras);
+    
+                    let situacaoAtual = enderecoAtual.situacao
+                    let situacao = 'Seguro'
+                    let situacaoCor = 'seguro'
+    
+                    if (situacaoAtual == 1) {
+                        situacao = 'Perigo'
+                        situacaoCor = 'perigo'
+                        enderecoPerigo++
+                    }
+                    
+                    let celSituacao = document.createElement('td');
+                    celSituacao.textContent = `${situacao}`
+                    celSituacao.classList.add(situacaoCor)
+                    linha.appendChild(celSituacao);
+    
                 }
-                
-                let celSituacao = document.createElement('td');
-                celSituacao.textContent = `${situacao[situacaoAtual]}`
-                celSituacao.classList.add(situacaoCor)
-                linha.appendChild(celSituacao);
 
+                const qtdEndereco = resposta.length;
 
-        // linha.addEventListener('click', function() {
-        //     window.location.href = this.getAttribute('data-href');
-        // });
+                const porcentagemTotalEnderecoPerigo = (enderecoPerigo * 100) / qtdEndereco ;
+                const porcentagemTotalEnderecoPerigoFormatada = porcentagemTotalEnderecoPerigo.toFixed(1);
 
-        qtdEnderecoPerigoRestante--
-        id++
+                const kpis = document.querySelector('.critico');
+
+                    if(enderecoPerigo >= 1){
+                        kpis.classList.add('alerta') 
+                    } else {
+                        kpis.classList.remove('alerta')
+                    }
+
+                h1_quantidade_endereco.innerHTML = qtdEndereco;
+                h1_endereco_totais_perigo.innerHTML = enderecoPerigo;
+
+                div_quantidade_endereco_perigo.innerHTML = `${porcentagemTotalEnderecoPerigoFormatada}% do total de endereco`;
+
+                // script do objeto 
+                    $(document).ready(function () {
+                        $('#minhaTabela').DataTable({
+                            dom: '<"custom-header"lf>rt<"custom-footer"ip>',
+                            pageLength: 5,
+                            lengthMenu: [5, 10, 25, 50, 100],
+                            language: {
+                                info: 'Páginas _PAGE_ de _PAGES_',
+                                infoEmpty: 'Nenhum registro disponível',
+                                infoFiltered: '(filtrado de _MAX_ registros totais)',
+                                lengthMenu: '_MENU_ Registros por páginas',
+                                zeroRecords: 'Nada encontrado',
+                                search: "",  // Desativa o label do input de busca
+                                searchPlaceholder: "Digite para buscar...",  // Placeholder do input de busca
+                                paginate: {
+                                    previous: "Anterior",
+                                    next: "Próximo"
+                                }
+                            },
+                        });
+                    });
+                });
+        } else {
+            throw ('Houve um erro na API!');
+        }
+    }).catch(function (resposta) {
+        console.error(resposta);
+        // finalizarAguardar();
+    });
 }
-
-h1_quantidade_endereco.innerHTML = qtdEndereco;
-h1_endereco_totais_perigo.innerHTML = enderecoPerigo;
-
-div_quantidade_endereco_perigo.innerHTML = `${porcentagemTotalEnderecoPerigoFormatada}% do total de endereco`;
 
 function limparSessao() {
     sessionStorage.clear();
     window.location = "index.html";
 }
-
-// script do objeto 
-$(document).ready(function () {
-    $('#minhaTabela').DataTable({
-        dom: '<"custom-header"lf>rt<"custom-footer"ip>',
-        pageLength: 5,
-        lengthMenu: [5, 10, 25, 50, 100],
-        language: {
-            info: 'Páginas _PAGE_ de _PAGES_',
-            infoEmpty: 'Nenhum registro disponível',
-            infoFiltered: '(filtrado de _MAX_ registros totais)',
-            lengthMenu: '_MENU_ Registros por páginas',
-            zeroRecords: 'Nada encontrado',
-            search: "",  // Desativa o label do input de busca
-            searchPlaceholder: "Digite para buscar...",  // Placeholder do input de busca
-            paginate: {
-                previous: "Anterior",
-                next: "Próximo"
-            }
-        },
-    });
-});
