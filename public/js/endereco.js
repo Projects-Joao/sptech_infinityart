@@ -19,8 +19,17 @@ function enderecoLinhas() {
                 for (let i = 0; i < resposta.length; i++) {
                     
                     let linha = document.createElement('tr');
+                    linha.dataset.idEndereco = resposta[i].id;
+                    linha.dataset.nomeEndereco = resposta[i].nome;
+
                     linha.addEventListener('click', function() {
-                    window.open('ambiente.html', '_blank'); // Abre o link em uma nova aba
+                        let idEndereco = this.dataset.idEndereco;
+                        let nomeEndereco = this.dataset.nomeEndereco;
+
+                            sessionStorage.ID_ENDERECO = idEndereco;
+                            sessionStorage.NOME_ENDERECO = nomeEndereco;
+
+                       window.open('ambiente.html', '_blank'); // Abre o link em uma nova aba  
                     });
                     bodyTabela.appendChild(linha)
                         

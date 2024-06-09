@@ -1,9 +1,10 @@
-var ambientesModel = require("../models/enderecosModel");
+var ambientesModel = require("../models/ambientesModel");
 
 function listarAmbientes(req, res) {
     var idUsuario = req.params.idUsuario;
+    var idEndereco = req.params.idEndereco;
 
-    ambientesModel.listarAmbientes(idUsuario)
+    ambientesModel.listarAmbientes(idUsuario, idEndereco)
         .then(
             function (resultado) {
                 if (resultado.length > 0) {

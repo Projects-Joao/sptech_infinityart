@@ -1,8 +1,9 @@
 function ambienteLinha() {
 
-    let idUsuario = sessionStorage.getItem('ID_USUARIO')
+    let idUsuario = sessionStorage.getItem('ID_USUARIO');
+    let idEndereco = sessionStorage.getItem('ID_ENDERECO');
 
-    fetch(`/ambientes/listarAmbientes/${idUsuario}`).then(function (resposta) {
+    fetch(`/ambientes/listarAmbientes/${idUsuario}/${idEndereco}`).then(function (resposta) {
 
         if (resposta.ok) {
             if (resposta.status == 204) {
@@ -26,30 +27,38 @@ function ambienteLinha() {
                         
                     var ambienteAtual = resposta[i];
 
+                    let id = ambienteAtual.id
+
                     let celId = document.createElement('td');
-                    celId.textContent = id + 1
+                    celId.textContent = id
                     linha.appendChild(celId);
+
+                    let ambiente = ambienteAtual.nome
             
                     let celAmbientes = document.createElement('td');
-                    celAmbientes.textContent = `${ambientes[ambientesVariaveis]}`
-                    linha.appendChild(celambientes);
+                    celAmbientes.textContent = `${ambiente}`
+                    linha.appendChild(celAmbientes);
+
+                    let qtdObras = ambienteAtual.qtd_obras
 
                     let obrasTotal = document.createElement('td');
-                    obrasTotal.textContent = `${quantidadeObras}`
+                    obrasTotal.textContent = `${qtdObras}`
                     linha.appendChild(obrasTotal);
 
+                    let qtdObrasPerigo = ambienteAtual.qtd_obras_perigo
+
                     let obrasPerigo = document.createElement('td');
-                    obrasPerigo.textContent = `${quantidadeObrasPerigo}`
+                    obrasPerigo.textContent = `${qtdObrasPerigo}`
                     linha.appendChild(obrasPerigo);
 
-                    let situacaoAtual = enderecoAtual.situacao
+                    let situacaoAtual = ambienteAtual.situacao
                     let situacao = 'Seguro'
                     let situacaoCor = 'seguro'
     
                     if (situacaoAtual == 1) {
                         situacao = 'Perigo'
                         situacaoCor = 'perigo'
-                        enderecoPerigo++
+                        ambientePerigo++
                     }
                     
                     let celSituacao = document.createElement('td');
@@ -72,10 +81,14 @@ function ambienteLinha() {
                         kpis.classList.remove('alerta')
                     }
 
-                h1_quantidade_endereco.innerHTML = qtdAmbientes;
-                h1_endereco_totais_perigo.innerHTML = ambientePerigo;
+                h1_quantidade_ambientes.innerHTML = qtdAmbientes;
+                h1_ambientes_totais_perigo.innerHTML = ambientePerigo;
 
-                div_quantidade_endereco_perigo.innerHTML = `${porcentagemTotalAmbientePerigoFormatada}% do total de endereco`;
+                div_quantidade_ambientes_perigo.innerHTML = `${porcentagemTotalAmbientePerigoFormatada}% do total de endereco`;
+
+                let localEndereco = document.querySelector('.local_nome');
+
+                localEndereco.innerHTML += ` ${sessionStorage.getItem('NOME_ENDERECO')}`
 
                 // script do objeto 
                     $(document).ready(function () {
