@@ -6,12 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/obras.css">
     <title>Obras</title>
+    <link
+    rel="shortcut icon"
+    href="assets/icon/favicon.ico"
+    type="image/x-icon"
+    />
     <script src="https://kit.fontawesome.com/80ec270284.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css">
     <!-- Font Awesome para os ícones -->
 </head>
 
-<body>
+<body onload="obrasLinha(),obrasKpi()">
 
     <header>
 
@@ -35,8 +40,14 @@
 
                 <ul>
 
+                    <a href="endereco.html">
+                        <li>Endereços</li>
+                    </a>
+                    <a href="ambiente.html">
+                        <li>Ambientes</li>
+                    </a>
                     <a href="">
-                        <li class="active">Dashboard</li>
+                        <li class="active">Obras</li>
                     </a>
                     <a href="index.html">
                         <li>Homepage</li>
@@ -85,35 +96,6 @@
 
                     </div>
 
-
-                    <div class="kpi critico">
-
-                        <div class="title-kpi">
-
-                            <h1>Obras em perigo</h1>
-
-                        </div>
-
-                        <div>
-                            <h1 class="kpi-num" id="h1_obras_5horas_perigo"></h1>
-                        </div>
-
-                        <div class="kpi-info">há mais de 5 horas</div>
-
-                    </div>
-
-                    <div class="kpi critico">
-
-                        <div class="title-kpi">
-                            <h1>Obras em perigo</h1>
-                        </div>
-
-                        <div>
-                            <h1 class="kpi-num" id="h1_obras_1hora_perigo"></h1>
-                        </div>
-
-                        <div class="kpi-info">há mais de 1 hora</div>
-
                     </div>
                 </div>
             </div>
@@ -127,15 +109,15 @@
                             </h1>
                         </div>
                         <div class="botao">
-                            <button onclick="">
+                            <button onclick="" id="openModal">
                                 <h5>ADICIONAR</h5>
                                 <i class="fa-solid fa-caret-down"></i>
                             </button>
                         </div>
                     </div>
                     <div class="local">
-                        <h4>Endereço: Casa</h4>
-                        <h4>Ambiente: Sala</h4>
+                        <h4 class="local_endereco">Endereço:</h4>
+                        <h4 class="local_ambiente">Ambiente:</h4>
                     </div>
                 </div>
             </div>
@@ -167,8 +149,70 @@
         </section>
 
     </section>
+
+    
+    <div id="fadeModal" class="hideModal"></div>
+
+    <div id="modalObra" class="hideModal">
+
+        <div class="modal_content">
+
+        <!-- Cad Ambiente -->
+  
+        <div class="container">
+          <div class="center">
+            <div class="cover">
+              <div class="imgCad">
+                  
+              </div>
+              <div class="form">
+                <div class="title">Cadastrar minhas obras</div>
+  
+                <label class="label-input" for="">
+                  <i class="fa-solid fa-house-user icon-modify"></i>
+                  <input
+                    class="input-style"
+                    type="text"
+                    placeholder="Nome da Obra"
+                  />
+                </label>
+  
+                <label class="label-input" for="">
+                  <i class="fa-solid fa-brush icon-modify"> </i>
+                  <input class="input-style" type="text" placeholder="Tipo de Tinta"/>
+                </label>
+  
+                <button class="btn-form">Cadastrar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        </div>
+
+    </div>
     
 </body>
 
 </html>
+
+
+<script>
+    
+    const btnOpenModal = document.querySelector("#openModal");
+    const modalObra = document.querySelector("#modalObra");
+    const fadeModal = document.querySelector("#fadeModal");
+
+    const togglemodalObra = () => {
+        modalObra.classList.toggle("hideModal");
+        fadeModal.classList.toggle("hideModal");
+    };
+
+    [btnOpenModal, fadeModal].forEach((el) => {
+        el.addEventListener("click", () => togglemodalObra());
+    });
+
+
+
+</script>
 
